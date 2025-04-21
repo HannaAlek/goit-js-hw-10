@@ -3,6 +3,7 @@ import "flatpickr/dist/flatpickr.min.css";
 
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
+
 const inputData= document.querySelector('#datetime-picker')
 let userSelectedDate=null;
 let intervalId=null;
@@ -22,6 +23,10 @@ const hoursEl=document.querySelector('[data-hours]');
 const minsEl=document.querySelector('[data-minutes]');
 const seconsEl=document.querySelector('[data-seconds]');
 const startBtn=document.querySelector('button[data-start]');
+
+
+// startBtn.disabled=true;
+
 
  function updateTimer(){
     const currentTime = Date.now();
@@ -89,7 +94,6 @@ function addLeadingZero(value){
 }
 
  flatpickr(inputData,options)
-//  startBtn.disabled=true;
  startBtn.addEventListener('click',startTimer)
 
 
