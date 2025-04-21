@@ -1,6 +1,8 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 const inputData= document.querySelector('#datetime-picker')
 let userSelectedDate=null;
 let intervalId=null;
@@ -34,11 +36,11 @@ const startBtn=document.querySelector('button[data-start]');
         inputData.disabled=false;
         return;
     }
-    const{days, hours, minutes, seconds}=convert(deltaTime);
-    daysEl.textContent=pad(days);
-    hoursEl.textContent=pad(hours);
-    minsEl.textContent=pad(minutes);
-    seconsEl.textContent=pad(seconds);
+    const{days, hours, minutes, seconds}=convertMs(deltaTime);
+    daysEl.textContent=addLeadingZero(days);
+    hoursEl.textContent=addLeadingZero(hours);
+    minsEl.textContent=addLeadingZero(minutes);
+    seconsEl.textContent=addLeadingZero(seconds);
 
 
 }
@@ -47,7 +49,9 @@ function startTimer(){
     if (!userSelectedDate || isNaN(userSelectedDate)) return;
     const currentTime=Date.now();
     if(userSelectedDate<=currentTime){
-        window.alert("Please choose a date in the future");
+        iziToast.show({
+            message:"Please choose a date in the future"
+        });
         return;
     }
     startBtn.disabled=true;
@@ -56,18 +60,31 @@ function startTimer(){
     intervalId=setInterval(updateTimer,1000);
 }
 
-function convert(deltaTime){
-    const days=Math.floor((deltaTime%(1000*60*60*24*30))/(1000*60*60*24));
+function convertMs(ms) {
+    // Number of milliseconds per unit of time
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+  
+    // Remaining days
+    const days = Math.floor(ms / day);
+    // Remaining hours
+    const hours = Math.floor((ms % day) / hour);
+    // Remaining minutes
+    const minutes = Math.floor(((ms % day) % hour) / minute);
+    // Remaining seconds
+    const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  
+    return { days, hours, minutes, seconds };
+  }
+  
+  console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+  console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+  console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+  
 
-    const hours=Math.floor((deltaTime%(1000*60*60*24))/(1000*60*60));
-
-    const minutes=Math.floor((deltaTime%(1000*60*60))/(1000*60));
-
-    const seconds=Math.floor((deltaTime%(1000*60))/1000);
-return {days, hours, minutes, seconds}
-}
-
-function pad(value){
+function addLeadingZero(value){
     return String(value).padStart(2,'0');
 }
 
