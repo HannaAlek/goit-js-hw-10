@@ -23,6 +23,7 @@ const options = {
         });
         return;
     }
+    
     updateTimer();
     intervalId=setInterval(updateTimer,1000);
     },
@@ -43,7 +44,7 @@ const seconsEl=document.querySelector('[data-seconds]');
         hoursEl.textContent='00';
         minsEl.textContent='00';
         seconsEl.textContent='00';
-        // startBtn.disabled=true;
+        startBtn.disabled=false;
         return;
     }
 
