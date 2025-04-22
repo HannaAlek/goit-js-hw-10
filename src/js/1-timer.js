@@ -5,7 +5,7 @@ import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
 const startBtn=document.querySelector('button[data-start]');
-startBtn.disabled=true;
+// startBtn.disabled=true;
 const inputData= document.querySelector('#datetime-picker')
 let userSelectedDate=null;
 let intervalId=null;
@@ -23,8 +23,6 @@ const options = {
         });
         return;
     }
-    startBtn.disabled=false;
-    inputData.disabled=false;
     updateTimer();
     intervalId=setInterval(updateTimer,1000);
     },
@@ -36,6 +34,7 @@ const minsEl=document.querySelector('[data-minutes]');
 const seconsEl=document.querySelector('[data-seconds]');
 
  function updateTimer(){
+
     const currentTime = Date.now();
     const deltaTime=userSelectedDate - currentTime;
     if (deltaTime<=0){
@@ -44,16 +43,15 @@ const seconsEl=document.querySelector('[data-seconds]');
         hoursEl.textContent='00';
         minsEl.textContent='00';
         seconsEl.textContent='00';
-        startBtn.disabled=true;
-        inputData.disabled=true;
+        // startBtn.disabled=true;
         return;
     }
+
     const{days, hours, minutes, seconds}=convertMs(deltaTime);
     daysEl.textContent=addLeadingZero(days);
     hoursEl.textContent=addLeadingZero(hours);
     minsEl.textContent=addLeadingZero(minutes);
     seconsEl.textContent=addLeadingZero(seconds);
-
 
 }
 
